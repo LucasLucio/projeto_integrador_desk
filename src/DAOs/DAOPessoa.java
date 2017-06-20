@@ -44,6 +44,9 @@ public class DAOPessoa extends DAOGenerico<Pessoa> {
 
         List<String> ls = new ArrayList<>();
         for (int i = 0; i < lf.size(); i++) {
+            System.out.println(lf.get(i).getDataNasc());
+            System.out.println("aqui");
+            System.out.println(lf.get(i).getDataCadastro());
             ls.add(lf.get(i).getIdPessoas()
  + "-" + lf.get(i).getNome()
  + "-" + lf.get(i).getRg()

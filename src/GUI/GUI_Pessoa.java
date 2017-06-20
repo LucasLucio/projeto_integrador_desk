@@ -5,11 +5,13 @@ import java.awt.BorderLayout;
 import DAOs.DAOPessoa;
 import Entidades.Cidade;
 import Entidades.Pessoa;
+import Ferramentas.CopiaImagem;
 import Ferramentas.JanelaPesquisarCidade;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
@@ -28,11 +30,16 @@ import javax.swing.JTextArea;
 import java.text.SimpleDateFormat;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
 import java.text.ParseException;
 import java.util.Date;
 
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerDateModel;
@@ -44,7 +51,10 @@ public class GUI_Pessoa extends JDialog {
     private JPanel pnNorte = new JPanel(new FlowLayout());
     private JPanel pnCentro = new JPanel(new GridLayout(0, 2));
     private JPanel pnSul = new JPanel(new FlowLayout());
+    private JPanel pnOeste = new JPanel(new GridLayout(0, 1));
     private JPanel pnCidade = new JPanel();
+    private JPanel pnData = new JPanel();
+    private JPanel pnData2 = new JPanel();
 
     private JLabel lbIdPessoas = new JLabel("Id Pessoa:");
     private JTextField tfIdPessoas = new JTextField(10);
@@ -113,6 +123,49 @@ public class GUI_Pessoa extends JDialog {
     DAOCidade daoCidade = new DAOCidade();
     Cidade cidadeSave = new Cidade();
 
+    //Funçoes da Imagem
+    JLabel labelFoto = new JLabel();
+
+    String origem;
+    String destino = "src/fotos/";
+    Image imagemAux;
+    String verify = "nao pode";
+
+    public void Deleta_imagem() {
+        String aux = String.valueOf(entidade.getIdPessoas()).trim();
+        origem = "src/fotos/" + aux + ".png";
+        System.out.println(origem);
+        File f = new File(origem);
+        if (f.exists()) {
+            f.delete();
+        }
+
+    }
+
+    public void Salva_imagem() {
+        destino = destino + tfIdPessoas.getText() + ".png";
+        CopiaImagem.copiar(origem, destino);
+        destino = "src/fotos/";
+    }
+
+    public void Acha_imagem() {
+        String aux = String.valueOf(entidade.getIdPessoas()).trim();
+        origem = "/fotos/" + aux + ".png";
+        ImageIcon icone = new ImageIcon(getClass().getResource(origem));
+        imagemAux = icone.getImage();
+        icone.setImage(imagemAux.getScaledInstance(300, 300, Image.SCALE_FAST));
+        labelFoto.setIcon(icone);
+
+    }
+
+    public void Nao_achou() {
+        origem = "/fotos/0.png";
+        ImageIcon icone = new ImageIcon(getClass().getResource(origem));
+        imagemAux = icone.getImage();
+        icone.setImage(imagemAux.getScaledInstance(300, 300, Image.SCALE_FAST));
+        labelFoto.setIcon(icone);
+    }
+
     public void AtivaFields(boolean n, boolean r, boolean c, boolean t, boolean e, boolean l, boolean s, boolean dn, boolean se, boolean dc) {
         tfNome.setEnabled(n);
         tfRg.setEnabled(r);
@@ -144,6 +197,7 @@ public class GUI_Pessoa extends JDialog {
         tfRg.setText("");
         tfCpf.setText("");
         tfTelefone.setText("");
+        tfEmail.setText("");
         tfLogin.setText("");
         tfSenha.setText("");
         tfDataNascimento.setText(DateDataCadastro.format(date));
@@ -157,17 +211,22 @@ public class GUI_Pessoa extends JDialog {
                 && (tfSenha.getText().equals("") || tfSenha.getText().equals(" ")) || (tfTelefone.getText().equals("") || tfTelefone.getText().equals(" "))) {
             int x = Integer.valueOf("Bug");
         }
-        if (!tfEmail.equals("")) {
-            if (!tfEmail.contains("@")) {
-                
-            } else {
+        if (!tfEmail.getText().equals("")) {
+            if (!tfEmail.getText().contains("@")) {
+                int x = Integer.valueOf("Bug");
             }
+            if (tfEmail.getText().trim().equals("")) {
+                int x = Integer.valueOf("Bug");
+            }
+        }
+        if (tfSenha.getText().trim().equals("")) {
+            int x = Integer.valueOf("Bug");
         }
     }
 
     public GUI_Pessoa() throws ParseException {
 
-        setSize(800, 500);
+        setSize(1200, 500);
         setResizable(false);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         cp = getContentPane();
@@ -177,6 +236,11 @@ public class GUI_Pessoa extends JDialog {
         pnNorte.setBackground(Color.lightGray);
         pnCentro.setBackground(Color.lightGray);
         pnSul.setBackground(Color.lightGray);
+        pnOeste.setBackground(Color.lightGray);
+        pnData.setBackground(Color.lightGray);
+        pnData2.setBackground(Color.lightGray);
+        pnSexo.setBackground(Color.lightGray);
+        pnCidade.setBackground(Color.lightGray);
 
         dialog.add(scroll);
         text.setEditable(false);
@@ -195,10 +259,6 @@ public class GUI_Pessoa extends JDialog {
 
         pnSul.add(lbAviso);
         lbAviso.setOpaque(true);
-
-        cp.add(pnNorte, BorderLayout.NORTH);
-        cp.add(pnCentro, BorderLayout.CENTER);
-        cp.add(pnSul, BorderLayout.SOUTH);
 
         pnCentro.add(lbNome);
         pnCentro.add(tfNome);
@@ -223,7 +283,8 @@ public class GUI_Pessoa extends JDialog {
 
         maskDataNasc.install(tfDataNascimento);
         pnCentro.add(lbDataNasc);
-        pnCentro.add(tfDataNascimento);
+        pnData.add(tfDataNascimento);
+        pnCentro.add(pnData);
 
         bgSexo.add(rbMasculino);
         pnSexo.add(rbMasculino);
@@ -236,12 +297,21 @@ public class GUI_Pessoa extends JDialog {
 
         SpDataCadastro.setEditor(spinnerEditorCad);
         pnCentro.add(lbDataCadastro);
-        pnCentro.add(SpDataCadastro);
+        pnData2.add(SpDataCadastro);
+        pnCentro.add(pnData2);
 
         pnCidade.add(tfCidadeIdCidade);
         pnCidade.add(btJnPesquisa);
         pnCentro.add(lbCidadeIdCidade);
         pnCentro.add(pnCidade);
+
+        pnOeste.add(labelFoto);
+        Nao_achou();
+
+        cp.add(pnNorte, BorderLayout.NORTH);
+        cp.add(pnCentro, BorderLayout.CENTER);
+        cp.add(pnSul, BorderLayout.SOUTH);
+        cp.add(pnOeste, BorderLayout.EAST);
 
         AtivaFields(false, false, false, false, false, false, false, false, false, false);
         tfCidadeIdCidade.setEnabled(false);
@@ -254,7 +324,7 @@ public class GUI_Pessoa extends JDialog {
                     String selectedItem = new JanelaPesquisarCidade(listaAuxiliar, getBounds().x + getWidth() + 5, getBounds().y).getValorRetornado();
                     if (!selectedItem.equals("")) {
                         String[] aux = selectedItem.split("-");
-                        tfCidadeIdCidade.setText(aux[0]);
+                        tfCidadeIdCidade.setText(aux[0] + " - " + aux[1] + " - " + aux[2]);
                         //clicarBotaoAutomaticamente(btnRetrieve, 0);
                     } else {
                         btJnPesquisa.requestFocus();
@@ -267,6 +337,7 @@ public class GUI_Pessoa extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+                    verify = "nao pode";
                     entidade = new Pessoa();
                     IdPessoas = Integer.valueOf(tfIdPessoas.getText());
                     entidade.setIdPessoas(IdPessoas);
@@ -275,7 +346,7 @@ public class GUI_Pessoa extends JDialog {
                     }
                     entidade = controle.obter(entidade.getIdPessoas());
                     if (entidade != null) {
-                        Ativabtn(false, false, false, false, true, true, true, false);
+                        Ativabtn(true, false, false, false, true, true, true, false);
                         tfNome.setText(entidade.getNome());
                         tfRg.setText(entidade.getRg());
                         tfCpf.setText(entidade.getCpf());
@@ -295,27 +366,38 @@ public class GUI_Pessoa extends JDialog {
                         tfCidadeIdCidade.setText(String.valueOf(entidade.getCidadeIdCidade().getIdCidade()) + " - "
                                 + String.valueOf(entidade.getCidadeIdCidade().getNome()) + " - "
                                 + String.valueOf(entidade.getCidadeIdCidade().getUf()));
+                        try {
+                            Acha_imagem();
+                        } catch (Exception err) {
+                            Nao_achou();
+                        }
                         lbAviso.setText("Achou na lista");
                         pnSul.setBackground(Color.green);
                     } else {
                         lbAviso.setText("Não achou na lista");
                         pnSul.setBackground(Color.red);
-                        Ativabtn(false, true, false, false, false, false, true, false);
+                        Nao_achou();
+                        Ativabtn(true, true, false, false, false, false, true, false);
                         AtivaFields(false, false, false, false, false, false, false, false, false, false);
+                        LimpaFields();
                     }
                 } catch (Exception err) {
+                    LimpaFields();
                     lbAviso.setText("Erro nos dados");
                     pnSul.setBackground(Color.red);
+                    Nao_achou();
                 }
 
             }
         }
         );
+
         btInserir.addActionListener(
                 new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e
             ) {
+                verify = "pode";
                 acao = true;
                 Ativabtn(false, false, true, true, false, false, false, true);
                 tfIdPessoas.setText(String.valueOf(IdPessoas));
@@ -356,14 +438,20 @@ public class GUI_Pessoa extends JDialog {
                         }
                         entidade.setSexo(rbSexo);
                         entidade.setDataCadastro((Date) SpDataCadastro.getValue());
-                        cidadeSave = daoCidade.obter(Integer.valueOf(tfCidadeIdCidade.getText().trim()));
+
+                        String[] Cidade = tfCidadeIdCidade.getText().split(" - ");
+                        String cidade = Cidade[0].trim();
+                        cidadeSave = daoCidade.obter(Integer.valueOf(cidade));
+                        
                         entidade.setCidadeIdCidade(cidadeSave);
-                        //verifica_campos();
+                        verifica_campos();
                         controle.inserir(entidade);
                         Ativabtn(true, false, false, false, true, true, true, false);
                         AtivaFields(false, false, false, false, false, false, false, false, false, false);
                         tfIdPessoas.setEnabled(true);
                         tfIdPessoas.requestFocus();
+                        Salva_imagem();
+                        verify = "nao pode";
                         lbAviso.setText("Registro inserido");
                         pnSul.setBackground(Color.green);
                     } catch (Exception btSalvar) {
@@ -385,8 +473,9 @@ public class GUI_Pessoa extends JDialog {
                         entidadeModificada.setLogin(tfLogin.getText());
                         entidadeModificada.setSenha(tfSenha.getText());
                         DateDataNasc.setLenient(false);
-                        entidadeModificada.setDataNasc(DateDataCadastro.parse(DateDataNasc.format(tfDataNascimento.getText())));
+                        entidadeModificada.setDataNasc(DateDataCadastro.parse(tfDataNascimento.getText()));
                         String rbSexo = " ";
+                        System.out.println("Chegou");
                         if (rbMasculino.isSelected()) {
                             rbSexo = "Masculino";
                         }
@@ -396,9 +485,11 @@ public class GUI_Pessoa extends JDialog {
                         entidadeModificada.setSexo(rbSexo);
                         DateDataCadastro.setLenient(false);
                         entidadeModificada.setDataCadastro((Date) SpDataCadastro.getValue());
+
                         String[] Cidade = tfCidadeIdCidade.getText().split(" - ");
                         String cidade = Cidade[0].trim();
                         cidadeSave = daoCidade.obter(Integer.valueOf(cidade));
+
                         entidadeModificada.setCidadeIdCidade(cidadeSave);
                         verifica_campos();
                         controle.atualizar(entidadeModificada);
@@ -409,6 +500,8 @@ public class GUI_Pessoa extends JDialog {
                         Ativabtn(true, false, false, false, true, true, true, false);
                         AtivaFields(false, false, false, false, false, false, false, false, false, false);
                         tfCidadeIdCidade.setEnabled(false);
+                        Salva_imagem();
+                        verify = "nao pode";
                         lbAviso.setText("Registro alterado");
                         pnSul.setBackground(Color.green);
                     } catch (Exception btSalvarAtt) {
@@ -437,6 +530,8 @@ public class GUI_Pessoa extends JDialog {
                 tfCidadeIdCidade.setText(String.valueOf("            "));
                 lbAviso.setText("Cancelado");
                 pnSul.setBackground(Color.green);
+                Nao_achou();
+                verify = "nao pode";
             }
         }
         );
@@ -453,6 +548,7 @@ public class GUI_Pessoa extends JDialog {
                 AtivaFields(true, true, true, true, true, true, true, true, true, false);
                 tfNome.requestFocus();
                 Ativabtn(false, false, true, true, false, false, false, true);
+                verify = "pode";
             }
         }
         );
@@ -475,7 +571,10 @@ public class GUI_Pessoa extends JDialog {
                     lbAviso.setText("Removeu");
                     pnSul.setBackground(Color.green);
                     Ativabtn(true, false, false, false, false, false, true, false);
+                    verify = "naoi pode";
+                    Nao_achou();
                 } else {
+                    verify = "naoi pode";
                     lbAviso.setText("Cancelada a remoção");
                     pnSul.setBackground(Color.green);
                     tfIdPessoas.requestFocus();
@@ -486,6 +585,31 @@ public class GUI_Pessoa extends JDialog {
             }
         }
         );
+
+        labelFoto.addMouseListener(new MouseAdapter() {
+            public void mouseReleased(MouseEvent e) {
+                if (verify.equals("pode")) {
+                    JFileChooser fc = new JFileChooser();
+                    fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                    if (fc.showOpenDialog(cp) == JFileChooser.APPROVE_OPTION) {
+                        File img = fc.getSelectedFile();
+                        origem = fc.getSelectedFile().getAbsolutePath();
+                        try {
+                            ImageIcon icone = new javax.swing.ImageIcon(img.getAbsolutePath());
+                            Image imagemAux;
+                            imagemAux = icone.getImage();
+                            icone.setImage(imagemAux.getScaledInstance(300, 300, Image.SCALE_FAST));
+                            labelFoto.setIcon(icone);
+
+                        } catch (Exception ex) {
+                            System.out.println("Erro: ");
+                        }
+                    }
+
+                }
+
+            }
+        });
 
         btListar.addActionListener(new ActionListener() {
             @Override
@@ -501,9 +625,12 @@ public class GUI_Pessoa extends JDialog {
                     } catch (Exception lista) {
                         JOptionPane.showMessageDialog(null, "Nao temos nada registrado", "OPS", JOptionPane.PLAIN_MESSAGE);
                         int erro = 3 / 0;
+                        System.out.println("fi");
                     }
                     for (Pessoa linha : dados) {
+                        System.out.println(linha);
                         aux = String.valueOf(linha).split(";");
+                        entidade = controle.obter(Integer.valueOf(aux[0]));
                         text.append(
                                 "IdPessoas: "
                                 + Integer.valueOf(aux[0])
@@ -530,18 +657,19 @@ public class GUI_Pessoa extends JDialog {
                                 + aux[7]
                                 + "\n"
                                 + "DataNasc: "
-                                + DateDataNasc.format(DateDataNasc.parse(aux[8]))
+                                + DateDataNasc.format(entidade.getDataNasc())
                                 + "\n"
                                 + "Sexo: "
                                 + aux[9]
                                 + "\n"
                                 + "DataCadastro: "
-                                + DateDataCadastro.format(DateDataCadastro.parse(aux[10]))
+                                + DateDataCadastro.format(entidade.getDataCadastro())
                                 + "\n"
-                                + "CidadeIdCidade: "
-                                + Integer.valueOf(aux[11])
+                                + "Cidade: "
+                                + (Integer.valueOf(aux[11]) + " - " + aux[12] + " - " + aux[13])
                                 + "\n-------------------------------------------------------------------------------------------\n"
                         );
+
                     }
                     dialog.setLocationRelativeTo(cp);
                     dialog.setModal(true);
