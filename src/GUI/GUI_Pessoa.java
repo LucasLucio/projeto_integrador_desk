@@ -122,6 +122,8 @@ public class GUI_Pessoa extends JDialog {
 
     DAOCidade daoCidade = new DAOCidade();
     Cidade cidadeSave = new Cidade();
+    //Verifica Cidades
+    List<String> listaUM = daoCidade.listInOrderNomeStrings("id");
 
     //Funçoes da Imagem
     JLabel labelFoto = new JLabel();
@@ -246,6 +248,13 @@ public class GUI_Pessoa extends JDialog {
         text.setEditable(false);
         dialog.setSize(500, 200);
 
+        if (listaUM.size() == 0) {
+            JOptionPane.showMessageDialog(cp, "Não é possível cadastrar alimentos sem \ncadastrar primeiro as Cidades \n"
+                    + "Escolha -> menu -> Cadastros -> Cidades");
+            return;
+
+        }
+        
         pnNorte.add(lbIdPessoas);
         pnNorte.add(tfIdPessoas);
         pnNorte.add(btBuscar);
@@ -442,7 +451,7 @@ public class GUI_Pessoa extends JDialog {
                         String[] Cidade = tfCidadeIdCidade.getText().split(" - ");
                         String cidade = Cidade[0].trim();
                         cidadeSave = daoCidade.obter(Integer.valueOf(cidade));
-                        
+
                         entidade.setCidadeIdCidade(cidadeSave);
                         verifica_campos();
                         controle.inserir(entidade);
@@ -571,10 +580,10 @@ public class GUI_Pessoa extends JDialog {
                     lbAviso.setText("Removeu");
                     pnSul.setBackground(Color.green);
                     Ativabtn(true, false, false, false, false, false, true, false);
-                    verify = "naoi pode";
+                    verify = "nao pode";
                     Nao_achou();
                 } else {
-                    verify = "naoi pode";
+                    verify = "nao pode";
                     lbAviso.setText("Cancelada a remoção");
                     pnSul.setBackground(Color.green);
                     tfIdPessoas.requestFocus();
