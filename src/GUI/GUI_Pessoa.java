@@ -267,7 +267,6 @@ public class GUI_Pessoa extends JDialog {
         Ativabtn(true, false, false, false, false, false, true, false);
 
         pnSul.add(lbAviso);
-        lbAviso.setOpaque(true);
 
         pnCentro.add(lbNome);
         pnCentro.add(tfNome);
@@ -634,55 +633,54 @@ public class GUI_Pessoa extends JDialog {
                     } catch (Exception lista) {
                         JOptionPane.showMessageDialog(null, "Nao temos nada registrado", "OPS", JOptionPane.PLAIN_MESSAGE);
                         int erro = 3 / 0;
-                        System.out.println("fi");
                     }
                     for (Pessoa linha : dados) {
-                        System.out.println(linha);
                         aux = String.valueOf(linha).split(";");
                         entidade = controle.obter(Integer.valueOf(aux[0]));
-                        text.append(
-                                "IdPessoas: "
-                                + Integer.valueOf(aux[0])
-                                + "\n"
-                                + "Nome: "
-                                + aux[1]
-                                + "\n"
-                                + "Rg: "
-                                + aux[2]
-                                + "\n"
-                                + "Cpf: "
-                                + aux[3]
-                                + "\n"
-                                + "Telefone: "
-                                + aux[4]
-                                + "\n"
-                                + "Email: "
-                                + aux[5]
-                                + "\n"
-                                + "Login: "
-                                + aux[6]
-                                + "\n"
-                                + "Senha: "
-                                + aux[7]
-                                + "\n"
-                                + "DataNasc: "
-                                + DateDataNasc.format(entidade.getDataNasc())
-                                + "\n"
-                                + "Sexo: "
-                                + aux[9]
-                                + "\n"
-                                + "DataCadastro: "
-                                + DateDataCadastro.format(entidade.getDataCadastro())
-                                + "\n"
-                                + "Cidade: "
-                                + (Integer.valueOf(aux[11]) + " - " + aux[12] + " - " + aux[13])
-                                + "\n-------------------------------------------------------------------------------------------\n"
-                        );
+//                        text.append(
+//                                "IdPessoas: "
+//                                + Integer.valueOf(aux[0])
+//                                + "\n"
+//                                + "Nome: "
+//                                + aux[1]
+//                                + "\n"
+//                                + "Rg: "
+//                                + aux[2]
+//                                + "\n"
+//                                + "Cpf: "
+//                                + aux[3]
+//                                + "\n"
+//                                + "Telefone: "
+//                                + aux[4]
+//                                + "\n"
+//                                + "Email: "
+//                                + aux[5]
+//                                + "\n"
+//                                + "Login: "
+//                                + aux[6]
+//                                + "\n"
+//                                + "Senha: "
+//                                + aux[7]
+//                                + "\n"
+//                                + "DataNasc: "
+//                                + DateDataNasc.format(entidade.getDataNasc())
+//                                + "\n"
+//                                + "Sexo: "
+//                                + aux[9]
+//                                + "\n"
+//                                + "DataCadastro: "
+//                                + DateDataCadastro.format(entidade.getDataCadastro())
+//                                + "\n"
+//                                + "Cidade: "
+//                                + (Integer.valueOf(aux[11]) + " - " + aux[12] + " - " + aux[13])
+//                                + "\n-------------------------------------------------------------------------------------------\n"
+//                        );
 
                     }
                     dialog.setLocationRelativeTo(cp);
                     dialog.setModal(true);
                     dialog.setVisible(true);
+                    System.out.println("foi");
                 } catch (Exception Lista) {
                 }
             }

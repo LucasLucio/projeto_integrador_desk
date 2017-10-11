@@ -6,18 +6,19 @@
 package Entidades;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Date;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -29,8 +30,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Pagamento.findAll", query = "SELECT p FROM Pagamento p")
     , @NamedQuery(name = "Pagamento.findByIdPagamento", query = "SELECT p FROM Pagamento p WHERE p.idPagamento = :idPagamento")
-    , @NamedQuery(name = "Pagamento.findByNome", query = "SELECT p FROM Pagamento p WHERE p.nome = :nome")
-    , @NamedQuery(name = "Pagamento.findByDescricao", query = "SELECT p FROM Pagamento p WHERE p.descricao = :descricao")})
+    , @NamedQuery(name = "Pagamento.findByDescricao", query = "SELECT p FROM Pagamento p WHERE p.descricao = :descricao")
+    , @NamedQuery(name = "Pagamento.findByDataPagamento", query = "SELECT p FROM Pagamento p WHERE p.dataPagamento = :dataPagamento")
+    , @NamedQuery(name = "Pagamento.findByTipo", query = "SELECT p FROM Pagamento p WHERE p.tipo = :tipo")})
 public class Pagamento implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -38,13 +40,18 @@ public class Pagamento implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_pagamento")
     private Integer idPagamento;
-    @Basic(optional = false)
-    @Column(name = "nome")
-    private String nome;
     @Column(name = "descricao")
     private String descricao;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pagamentoIdPagamento")
-    private List<Contrato> contratoList;
+    @Basic(optional = false)
+    @Column(name = "data_pagamento")
+    @Temporal(TemporalType.DATE)
+    private Date dataPagamento;
+    @Basic(optional = false)
+    @Column(name = "tipo")
+    private String tipo;
+    @JoinColumn(name = "contrato_id_contrato", referencedColumnName = "id_contrato")
+    @ManyToOne(optional = false)
+    private Contrato contratoIdContrato;
 
     public Pagamento() {
     }
@@ -53,9 +60,10 @@ public class Pagamento implements Serializable {
         this.idPagamento = idPagamento;
     }
 
-    public Pagamento(Integer idPagamento, String nome) {
+    public Pagamento(Integer idPagamento, Date dataPagamento, String tipo) {
         this.idPagamento = idPagamento;
-        this.nome = nome;
+        this.dataPagamento = dataPagamento;
+        this.tipo = tipo;
     }
 
     public Integer getIdPagamento() {
@@ -66,14 +74,6 @@ public class Pagamento implements Serializable {
         this.idPagamento = idPagamento;
     }
 
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
     public String getDescricao() {
         return descricao;
     }
@@ -82,13 +82,28 @@ public class Pagamento implements Serializable {
         this.descricao = descricao;
     }
 
-    @XmlTransient
-    public List<Contrato> getContratoList() {
-        return contratoList;
+    public Date getDataPagamento() {
+        return dataPagamento;
     }
 
-    public void setContratoList(List<Contrato> contratoList) {
-        this.contratoList = contratoList;
+    public void setDataPagamento(Date dataPagamento) {
+        this.dataPagamento = dataPagamento;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public Contrato getContratoIdContrato() {
+        return contratoIdContrato;
+    }
+
+    public void setContratoIdContrato(Contrato contratoIdContrato) {
+        this.contratoIdContrato = contratoIdContrato;
     }
 
     @Override
@@ -113,7 +128,7 @@ public class Pagamento implements Serializable {
 
     @Override
     public String toString() {
-        return "Main.Pagamento[ idPagamento=" + idPagamento + " ]";
+        return "Entidades.Pagamento[ idPagamento=" + idPagamento + " ]";
     }
-    
+
 }

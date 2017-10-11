@@ -100,7 +100,7 @@ public class GUI_Cidade extends JDialog {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         cp = getContentPane();
         cp.setLayout(new BorderLayout());
-        setTitle("");
+        setTitle("Cidades");
 
         pnNorte.setBackground(Color.lightGray);
         pnCentro.setBackground(Color.lightGray);
@@ -122,7 +122,6 @@ public class GUI_Cidade extends JDialog {
         pnNorte.add(btListar);
 
         pnSul.add(lbAviso);
-        lbAviso.setOpaque(true);
 
         cp.add(pnNorte, BorderLayout.NORTH);
         cp.add(pnCentro, BorderLayout.CENTER);

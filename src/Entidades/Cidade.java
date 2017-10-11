@@ -6,7 +6,6 @@
 package Entidades;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -133,8 +132,7 @@ public class Cidade implements Serializable {
 
     @Override
     public String toString() {
-        SimpleDateFormat dateDataCadastro = new SimpleDateFormat("dd/MM/yyyy");
-        return idCidade + ";" + nome + ";" + uf + ";" + dateDataCadastro.format(dataCadastro) + ";" + pessoaList;
+        return "Entidades.Cidade[ idCidade=" + idCidade + " ]";
     }
-
+    
 }

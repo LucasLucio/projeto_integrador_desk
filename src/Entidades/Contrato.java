@@ -6,7 +6,11 @@
 package Entidades;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -14,8 +18,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -27,7 +35,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Contrato.findAll", query = "SELECT c FROM Contrato c")
     , @NamedQuery(name = "Contrato.findByIdContrato", query = "SELECT c FROM Contrato c WHERE c.idContrato = :idContrato")
-    , @NamedQuery(name = "Contrato.findByServicosDescricao", query = "SELECT c FROM Contrato c WHERE c.servicosDescricao = :servicosDescricao")})
+    , @NamedQuery(name = "Contrato.findByContratoDescricao", query = "SELECT c FROM Contrato c WHERE c.contratoDescricao = :contratoDescricao")
+    , @NamedQuery(name = "Contrato.findByDataContrato", query = "SELECT c FROM Contrato c WHERE c.dataContrato = :dataContrato")
+    , @NamedQuery(name = "Contrato.findByValorContrato", query = "SELECT c FROM Contrato c WHERE c.valorContrato = :valorContrato")})
 public class Contrato implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -36,17 +46,22 @@ public class Contrato implements Serializable {
     @Column(name = "id_contrato")
     private Integer idContrato;
     @Basic(optional = false)
-    @Column(name = "servicos_descricao")
-    private String servicosDescricao;
-    @JoinColumn(name = "pagamento_id_pagamento", referencedColumnName = "id_pagamento")
-    @ManyToOne(optional = false)
-    private Pagamento pagamentoIdPagamento;
+    @Column(name = "contrato_descricao")
+    private String contratoDescricao;
+    @Basic(optional = false)
+    @Column(name = "data_contrato")
+    @Temporal(TemporalType.DATE)
+    private Date dataContrato;
+    @Basic(optional = false)
+    @Column(name = "valor_contrato")
+    private double valorContrato;
     @JoinColumn(name = "pessoa_id_pessoas", referencedColumnName = "id_pessoas")
     @ManyToOne(optional = false)
     private Pessoa pessoaIdPessoas;
-    @JoinColumn(name = "servicos_id_servicos", referencedColumnName = "id_servicos")
-    @ManyToOne(optional = false)
-    private Servicos servicosIdServicos;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "contratoIdContrato")
+    private List<Pagamento> pagamentoList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "contrato")
+    private List<ServicosDescricao> servicosDescricaoList;
 
     public Contrato() {
     }
@@ -55,9 +70,11 @@ public class Contrato implements Serializable {
         this.idContrato = idContrato;
     }
 
-    public Contrato(Integer idContrato, String servicosDescricao) {
+    public Contrato(Integer idContrato, String contratoDescricao, Date dataContrato, double valorContrato) {
         this.idContrato = idContrato;
-        this.servicosDescricao = servicosDescricao;
+        this.contratoDescricao = contratoDescricao;
+        this.dataContrato = dataContrato;
+        this.valorContrato = valorContrato;
     }
 
     public Integer getIdContrato() {
@@ -68,20 +85,28 @@ public class Contrato implements Serializable {
         this.idContrato = idContrato;
     }
 
-    public String getServicosDescricao() {
-        return servicosDescricao;
+    public String getContratoDescricao() {
+        return contratoDescricao;
     }
 
-    public void setServicosDescricao(String servicosDescricao) {
-        this.servicosDescricao = servicosDescricao;
+    public void setContratoDescricao(String contratoDescricao) {
+        this.contratoDescricao = contratoDescricao;
     }
 
-    public Pagamento getPagamentoIdPagamento() {
-        return pagamentoIdPagamento;
+    public Date getDataContrato() {
+        return dataContrato;
     }
 
-    public void setPagamentoIdPagamento(Pagamento pagamentoIdPagamento) {
-        this.pagamentoIdPagamento = pagamentoIdPagamento;
+    public void setDataContrato(Date dataContrato) {
+        this.dataContrato = dataContrato;
+    }
+
+    public double getValorContrato() {
+        return valorContrato;
+    }
+
+    public void setValorContrato(double valorContrato) {
+        this.valorContrato = valorContrato;
     }
 
     public Pessoa getPessoaIdPessoas() {
@@ -92,12 +117,22 @@ public class Contrato implements Serializable {
         this.pessoaIdPessoas = pessoaIdPessoas;
     }
 
-    public Servicos getServicosIdServicos() {
-        return servicosIdServicos;
+    @XmlTransient
+    public List<Pagamento> getPagamentoList() {
+        return pagamentoList;
     }
 
-    public void setServicosIdServicos(Servicos servicosIdServicos) {
-        this.servicosIdServicos = servicosIdServicos;
+    public void setPagamentoList(List<Pagamento> pagamentoList) {
+        this.pagamentoList = pagamentoList;
+    }
+
+    @XmlTransient
+    public List<ServicosDescricao> getServicosDescricaoList() {
+        return servicosDescricaoList;
+    }
+
+    public void setServicosDescricaoList(List<ServicosDescricao> servicosDescricaoList) {
+        this.servicosDescricaoList = servicosDescricaoList;
     }
 
     @Override
@@ -122,7 +157,8 @@ public class Contrato implements Serializable {
 
     @Override
     public String toString() {
-        return "Main.Contrato[ idContrato=" + idContrato + " ]";
+        SimpleDateFormat dateDataContrato = new SimpleDateFormat("");
+        return idContrato + ";" + contratoDescricao + ";" + dateDataContrato.format(dataContrato) + ";" + valorContrato + ";" + pessoaIdPessoas + ";" + pagamentoList + ";" + servicosDescricaoList;
     }
-    
+
 }

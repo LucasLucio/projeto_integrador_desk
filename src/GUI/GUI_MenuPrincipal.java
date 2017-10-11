@@ -41,8 +41,11 @@ public class GUI_MenuPrincipal extends JFrame {
 
     JMenuBar menuBar = new JMenuBar();
     JMenu menuCadastros = new JMenu("Cadastros");
+    JMenu menuContrato = new JMenu("Contrato");
     JMenuItem cadPessoa = new JMenuItem("Pessoa");
     JMenuItem cadCidade = new JMenuItem("Cidade");
+    JMenuItem cadContrato = new JMenuItem("Novo Contrato");
+    JMenuItem cadBusca = new JMenuItem("Buscar Contrato");
     Point p;
 
     @Override
@@ -79,9 +82,13 @@ public class GUI_MenuPrincipal extends JFrame {
 
         setJMenuBar(menuBar);
         menuBar.add(menuCadastros);
+        menuBar.add(menuContrato);
 
         menuCadastros.add(cadPessoa);
         menuCadastros.add(cadCidade);
+        
+        menuContrato.add(cadContrato);
+        menuContrato.add(cadBusca);
 
         cadPessoa.addActionListener(new ActionListener() {
             @Override
@@ -93,11 +100,32 @@ public class GUI_MenuPrincipal extends JFrame {
                 }
             }
         });
+        cadBusca.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    GUI_ContratoBuscar gui_ContratoBuscar = new GUI_ContratoBuscar();
+                } catch (ParseException ex) {
+                    Logger.getLogger(GUI_MenuPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
         cadCidade.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
                     GUI_Cidade gui_Cidade = new GUI_Cidade();
+                } catch (ParseException ex) {
+                    Logger.getLogger(GUI_MenuPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        cadContrato.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    GUI_ContratoNovo gui = new GUI_ContratoNovo();
+                    // GUI_Contrato gui_Contrato = new GUI_Contrato();
                 } catch (ParseException ex) {
                     Logger.getLogger(GUI_MenuPrincipal.class.getName()).log(Level.SEVERE, null, ex);
                 }

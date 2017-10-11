@@ -47,10 +47,8 @@ public class Servicos implements Serializable {
     @Basic(optional = false)
     @Column(name = "valor")
     private double valor;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "servicosIdServicos")
-    private List<Contrato> contratoList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "servicosIdServicos")
-    private List<Agenda> agendaList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "servicos")
+    private List<ServicosDescricao> servicosDescricaoList;
 
     public Servicos() {
     }
@@ -98,21 +96,12 @@ public class Servicos implements Serializable {
     }
 
     @XmlTransient
-    public List<Contrato> getContratoList() {
-        return contratoList;
+    public List<ServicosDescricao> getServicosDescricaoList() {
+        return servicosDescricaoList;
     }
 
-    public void setContratoList(List<Contrato> contratoList) {
-        this.contratoList = contratoList;
-    }
-
-    @XmlTransient
-    public List<Agenda> getAgendaList() {
-        return agendaList;
-    }
-
-    public void setAgendaList(List<Agenda> agendaList) {
-        this.agendaList = agendaList;
+    public void setServicosDescricaoList(List<ServicosDescricao> servicosDescricaoList) {
+        this.servicosDescricaoList = servicosDescricaoList;
     }
 
     @Override
@@ -137,7 +126,7 @@ public class Servicos implements Serializable {
 
     @Override
     public String toString() {
-        return "Main.Servicos[ idServicos=" + idServicos + " ]";
+        return idServicos + ";" + nome + ";" + descricao + ";" + valor + ";" + servicosDescricaoList;
     }
-    
+
 }

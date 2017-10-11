@@ -6,7 +6,6 @@
 package Entidades;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -15,7 +14,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -37,6 +35,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Pessoa.findAll", query = "SELECT p FROM Pessoa p")
     , @NamedQuery(name = "Pessoa.findByIdPessoas", query = "SELECT p FROM Pessoa p WHERE p.idPessoas = :idPessoas")
     , @NamedQuery(name = "Pessoa.findByNome", query = "SELECT p FROM Pessoa p WHERE p.nome = :nome")
+    , @NamedQuery(name = "Pessoa.findByRg", query = "SELECT p FROM Pessoa p WHERE p.rg = :rg")
     , @NamedQuery(name = "Pessoa.findByCpf", query = "SELECT p FROM Pessoa p WHERE p.cpf = :cpf")
     , @NamedQuery(name = "Pessoa.findByTelefone", query = "SELECT p FROM Pessoa p WHERE p.telefone = :telefone")
     , @NamedQuery(name = "Pessoa.findByEmail", query = "SELECT p FROM Pessoa p WHERE p.email = :email")
@@ -56,7 +55,6 @@ public class Pessoa implements Serializable {
     @Column(name = "nome")
     private String nome;
     @Basic(optional = false)
-    @Lob
     @Column(name = "rg")
     private String rg;
     @Basic(optional = false)
@@ -237,9 +235,9 @@ public class Pessoa implements Serializable {
 
     @Override
     public String toString() {
-        SimpleDateFormat dateDataNasc = new SimpleDateFormat("");
-        SimpleDateFormat dateDataCadastro = new SimpleDateFormat("");
-        return idPessoas + ";" + nome + ";" + rg + ";" + cpf + ";" + telefone + ";" + email + ";" + login + ";" + senha + ";" + dateDataNasc.format(dataNasc) + ";" + sexo + ";" + dateDataCadastro.format(dataCadastro) + ";" + cidadeIdCidade + ";" + contratoList;
+        return idPessoas + ";" + nome + ";" + rg + ";" + cpf + ";" + telefone + ";" + email + ";" + login + ";" + senha + ";" + dataNasc + ";" + sexo + ";" + dataCadastro + ";" + cidadeIdCidade + ";" + contratoList;
     }
 
+    
+    
 }

@@ -1,4 +1,5 @@
 package DAOs;
+
 import Entidades.Pessoa;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,7 @@ public class DAOPessoa extends DAOGenerico<Pessoa> {
     }
 
     public List<Pessoa> listInOrderId() {
-        return em.createQuery("SELECT e FROM Pessoa e ORDER BY e.idPessoa").getResultList();
+        return em.createQuery("SELECT e FROM Pessoa e ORDER BY e.idPessoas").getResultList();
     }
 
     public List<String> listInOrderNomeStrings(String qualOrdem) {
@@ -48,19 +49,19 @@ public class DAOPessoa extends DAOGenerico<Pessoa> {
             System.out.println("aqui");
             System.out.println(lf.get(i).getDataCadastro());
             ls.add(lf.get(i).getIdPessoas()
- + "-" + lf.get(i).getNome()
- + "-" + lf.get(i).getRg()
- + "-" + lf.get(i).getCpf()
- + "-" + lf.get(i).getTelefone()
- + "-" + lf.get(i).getEmail()
- + "-" + lf.get(i).getLogin()
- + "-" + lf.get(i).getSenha()
- + "-" + lf.get(i).getDataNasc()
- + "-" + lf.get(i).getSexo()
- + "-" + lf.get(i).getDataCadastro()
- + "-" + lf.get(i).getCidadeIdCidade()
- + "-" + lf.get(i).getContratoList()
-);
+                    + "-" + lf.get(i).getNome()
+                    + "-" + lf.get(i).getRg()
+                    + "-" + lf.get(i).getCpf()
+                    + "-" + lf.get(i).getTelefone()
+                    + "-" + lf.get(i).getEmail()
+                    + "-" + lf.get(i).getLogin()
+                    + "-" + lf.get(i).getSenha()
+                    + "-" + lf.get(i).getDataNasc()
+                    + "-" + lf.get(i).getSexo()
+                    + "-" + lf.get(i).getDataCadastro()
+                    + "-" + lf.get(i).getCidadeIdCidade()
+                    + "-" + lf.get(i).getContratoList()
+            );
         }
         return ls;
     }

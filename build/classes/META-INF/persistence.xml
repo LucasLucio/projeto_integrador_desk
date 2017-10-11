@@ -7,7 +7,7 @@
     <class>Entidades.Contrato</class>
     <class>Entidades.Pagamento</class>
     <class>Entidades.Servicos</class>
-    <class>Entidades.Agenda</class>
+    <class>Entidades.ServicosDescricao</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/help?zeroDateTimeBehavior=convertToNull"/>
       <property name="javax.persistence.jdbc.user" value="root"/>
